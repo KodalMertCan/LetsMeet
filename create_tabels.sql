@@ -1,9 +1,4 @@
--- create_tables.sql (ERD v2)
--- USER, NACHRICHT, USER_LIKE, FRIEND_LIST, HOBBY, HOBBY_PRIORITY, PHOTO
-
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- Clean rebuild (nur DEV)
+-- Schema neu aufsetzen (nur in DEV verwenden)
 DROP TABLE IF EXISTS PHOTO CASCADE;
 DROP TABLE IF EXISTS HOBBY_PRIORITY CASCADE;
 DROP TABLE IF EXISTS HOBBY CASCADE;
@@ -11,7 +6,6 @@ DROP TABLE IF EXISTS USER_LIKE CASCADE;
 DROP TABLE IF EXISTS NACHRICHT CASCADE;
 DROP TABLE IF EXISTS FRIEND_LIST CASCADE;
 DROP TABLE IF EXISTS "USER" CASCADE;
-
 
 -- USER
 CREATE TABLE "USER" (
@@ -48,14 +42,13 @@ CREATE TABLE NACHRICHT (
     timestamp       DATE
 );
 
--- USER_LIKE
+-- USER_LIKE  (neu: like_id PK, status statt text, keine conversation_id)
 CREATE TABLE USER_LIKE (
-    message_id      SERIAL PRIMARY KEY,
-    conversation_id INT,
-    sender_id       INT REFERENCES "USER"(id) ON DELETE SET NULL,
-    receiver_id     INT REFERENCES "USER"(id) ON DELETE SET NULL,
-    text            VARCHAR,
-    timestamp       DATE
+    like_id     SERIAL PRIMARY KEY,
+    sender_id   INT REFERENCES "USER"(id) ON DELETE SET NULL,
+    receiver_id INT REFERENCES "USER"(id) ON DELETE SET NULL,
+    timestamp   DATE,
+    status      VARCHAR
 );
 
 -- HOBBY
@@ -64,7 +57,7 @@ CREATE TABLE HOBBY (
     hobby_name VARCHAR(200) UNIQUE NOT NULL
 );
 
--- HOBBY_PRIORITY (Priority als STRING/VARCHAR gemäß ERD)
+-- HOBBY_PRIORITY
 CREATE TABLE HOBBY_PRIORITY (
     user_id  INT NOT NULL REFERENCES "USER"(id) ON DELETE CASCADE,
     hobby_id INT NOT NULL REFERENCES HOBBY(hobby_id) ON DELETE CASCADE,
@@ -72,14 +65,15 @@ CREATE TABLE HOBBY_PRIORITY (
     PRIMARY KEY (user_id, hobby_id)
 );
 
--- PHOTO
+-- PHOTO  (neu: link TEXT)
 CREATE TABLE PHOTO (
     photo_id   SERIAL PRIMARY KEY,
     user_id    INT NOT NULL REFERENCES "USER"(id) ON DELETE CASCADE,
+    link       TEXT,
     created_at DATE DEFAULT CURRENT_DATE
 );
 
--- Indizes
+-- Nützliche Indizes
 CREATE INDEX IF NOT EXISTS idx_user_email ON "USER"(email);
 CREATE INDEX IF NOT EXISTS idx_msg_sender_time ON NACHRICHT(user_id, timestamp);
 CREATE INDEX IF NOT EXISTS idx_like_sender_time ON USER_LIKE(sender_id, timestamp);
@@ -94,5 +88,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS trg_user_updated_at ON "USER";
-CREATE TRIGGER trg_user_updated_at BEFORE UPDATE ON "USER"
+CREATE TRIGGER trg_user_updated_at
+BEFORE UPDATE ON "USER"
 FOR EACH ROW EXECUTE FUNCTION set_user_updated_at();
