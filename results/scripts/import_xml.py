@@ -6,7 +6,7 @@ import psycopg2
 from lxml import etree
 from db_utils import PG_DSN, ensure_user, ensure_hobby
 
-XML_PATH = Path("Lets_Meet_Hobbies.xml")
+XML_PATH = Path("/workspaces/LetsMeet/Lets_Meet_Hobbies.xml")
 
 def run():
     if not XML_PATH.exists():
