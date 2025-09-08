@@ -21,8 +21,6 @@ def run():
                 email = (u.findtext("email") or "").strip().lower()
                 if not email:
                     continue
-                # Name kann "Nachname, Vorname" oder frei sein – wir speichern ihn roh,
-                # du kannst split_name importieren, wenn du willst.
                 user_id = ensure_user(cur, email, surname=None, name=(u.findtext("name") or "").strip())
                 for hobby in u.findall("hobby"):
                     hname = (hobby.text or "").strip()
