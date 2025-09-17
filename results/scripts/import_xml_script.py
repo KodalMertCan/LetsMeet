@@ -4,7 +4,7 @@
 from pathlib import Path
 import psycopg2
 from lxml import etree
-from db_utils import PG_DSN, ensure_user, ensure_hobby
+from db_connection_script import PG_DSN, ensure_user, ensure_hobby
 
 XML_PATH = Path("/workspaces/LetsMeet/Lets_Meet_Hobbies.xml")
 

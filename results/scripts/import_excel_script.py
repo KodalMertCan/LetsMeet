@@ -5,7 +5,7 @@ from pathlib import Path
 import re
 import pandas as pd
 import psycopg2
-from db_utils import PG_DSN, to_date, split_name, ensure_user, ensure_hobby, set_hobby_priority
+from db_connection_script import PG_DSN, to_date, split_name, ensure_user, ensure_hobby, set_hobby_priority
 
 EXCEL_PATH = Path("/workspaces/LetsMeet/Lets_Meet_DB_Dump.xlsx")
 

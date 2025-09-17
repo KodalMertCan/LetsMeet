@@ -1,8 +1,8 @@
 import unittest
 from datetime import date
 import import_excel_script as excel_mod
-import import_xml as xml_mod
-import import_mongo as mongo_mod
+import import_xml_script as xml_mod
+import import_mongo_script as mongo_mod
 
 
 # =============== Excel: 3 Beispieldatensätze ===============

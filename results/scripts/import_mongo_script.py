@@ -3,7 +3,7 @@
 
 import psycopg2
 from pymongo import MongoClient
-from db_utils import PG_DSN, to_date, split_name, ensure_user
+from db_connection_script import PG_DSN, to_date, split_name, ensure_user
 
 MONGO_URI = "mongodb://localhost:27017"
 MONGO_DB = "LetsMeet"
