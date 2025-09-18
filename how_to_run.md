@@ -6,7 +6,7 @@ Bitte diesen Schritte folgen, um das Projekt korrekt auszuführen:
 Import-Skript ausführen, damit Daten aus Excel, XML und MongoDB geladen werden:
 
 ```bash
-python results/scripts/run_all.py
+python results/scripts/run_all_script.py
 ```
 
 ---

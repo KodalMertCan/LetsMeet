@@ -1,4 +1,3 @@
--- Schema neu aufsetzen (nur in DEV verwenden)
 DROP TABLE IF EXISTS PHOTO CASCADE;
 DROP TABLE IF EXISTS HOBBY_PRIORITY CASCADE;
 DROP TABLE IF EXISTS HOBBY CASCADE;
@@ -72,22 +71,3 @@ CREATE TABLE PHOTO (
     link       TEXT,
     created_at DATE DEFAULT CURRENT_DATE
 );
-
--- Nützliche Indizes
-CREATE INDEX IF NOT EXISTS idx_user_email ON "USER"(email);
-CREATE INDEX IF NOT EXISTS idx_msg_sender_time ON NACHRICHT(user_id, timestamp);
-CREATE INDEX IF NOT EXISTS idx_like_sender_time ON USER_LIKE(sender_id, timestamp);
-
--- Trigger: updated_at automatisch setzen
-CREATE OR REPLACE FUNCTION set_user_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = CURRENT_DATE;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-DROP TRIGGER IF EXISTS trg_user_updated_at ON "USER";
-CREATE TRIGGER trg_user_updated_at
-BEFORE UPDATE ON "USER"
-FOR EACH ROW EXECUTE FUNCTION set_user_updated_at();
